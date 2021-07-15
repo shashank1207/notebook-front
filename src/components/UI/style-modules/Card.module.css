@@ -1,0 +1,16 @@
+.main{
+  height: auto;
+  max-width: 40rem;
+  margin: 3rem auto;
+  background-color: white;
+  padding: 1rem 3rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+@media (max-width: 767px) {
+  .main{
+    padding: 20px;
+    width: 90vw !important;
+  }
+}
