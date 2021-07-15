@@ -1,7 +1,7 @@
 var host = "http://localhost:5000";
 
-export const signupReq = async (userdata) => {
-  const response = await fetch(host + "/signup", {
+export const postReq = async (userdata, path) => {
+  const response = await fetch(host + path, {
     method: "POST",
     body: JSON.stringify(userdata),
     headers: {

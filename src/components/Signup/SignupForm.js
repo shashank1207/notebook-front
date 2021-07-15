@@ -1,15 +1,16 @@
 import Card from "../UI/Card";
-import { TextField } from "@material-ui/core";
+import { TextField, Divider } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Button from "../UI/Button";
-import { useCallback, useEffect } from "react";
-import { signupReq } from "../../functions/api-calls/post-requests";
+import { useCallback} from "react";
+import { postReq } from "../../functions/api-calls/post-requests";
 import { useDispatch, useSelector } from "react-redux";
-import { signupActions } from "../../store/user-slice";
+import { signupActions } from "../../store/signup-slice";
 import { useHistory } from "react-router-dom";
 import useInput from "../../hooks/use-input";
+import { Link } from "react-router-dom";
 
-const SignupForm = (props) => {
+const SignupForm = () => {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.signup.error);
   const isSignedup = useSelector((state) => state.signup.signedup);
@@ -90,10 +91,6 @@ const SignupForm = (props) => {
     resetConfirmPassword();
   }, [resetName, resetPassword, resetEmail, resetConfirmPassword, error]);
 
-  useEffect(() => {
-    resetForm();
-  }, [error, resetForm]);
-
   const formSubmitHandler = async (event) => {
     event.preventDefault();
     if (!isFormValid) {
@@ -101,12 +98,15 @@ const SignupForm = (props) => {
     }
 
     try {
-      const response = await signupReq({
-        name: enteredName,
-        email: enteredEmail,
-        password: enteredPassword,
-        confirmPassword: enteredConfirmPassword,
-      });
+      const response = await postReq(
+        {
+          name: enteredName,
+          email: enteredEmail,
+          password: enteredPassword,
+          confirmPassword: enteredConfirmPassword,
+        },
+        "/signup"
+      );
       dispatch(signupActions.changeSignedupStatus(response));
       dispatch(signupActions.setErrors({ err: null }));
 
@@ -121,10 +121,11 @@ const SignupForm = (props) => {
   };
 
   return (
-    <Card className={`d-flex align-items-center flex-column w-100`}>
+    <Card
+      className={`d-flex align-items-center flex-column w-100 py-2 px-md-5 px-3`}
+    >
       <div className={`d-flex align-items-center flex-column m-2`}>
         <span className={`font-family-roman font-size-lg m-1`}>Sign up</span>
-
         <span className={`font-size-md`}>
           Please fill out details required below to continue.
         </span>
@@ -200,9 +201,13 @@ const SignupForm = (props) => {
           color="#fff"
           bg-color="#00a82d"
           type="submit"
-          className={`font-weight-bold w-md-75 my-4 mw-200`}
+          className={`font-weight-bold w-md-75 mt-2 mw-200`}
         />
       </form>
+      <Divider variant="middle" />
+      <span className="font-family-roman">
+        Already an user? <Link to="/login">Login</Link>
+      </span>
     </Card>
   );
 };

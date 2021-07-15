@@ -1,6 +1,6 @@
 import Signup from "../components/Signup/Signup"
 const SignupPage = () => {
-  return <Signup />
+  return <div className={`bg-color full-page`}><Signup /></div>
 };
 
 export default SignupPage;

@@ -5,10 +5,10 @@ import HomePage from "./pages/HomePage";
 import { useSelector } from "react-redux";
 import WelcomePage from "./pages/WelcomePage";
 import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
-  const isLoggedIn = useSelector((state) => state.signup.isLoggedIn);
-  console.log(isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
 
   return (
     <Switch>
@@ -22,7 +22,7 @@ function App() {
         {!isLoggedIn ? <Redirect to="/login" /> : <HomePage />}
       </Route>
       <Route path="/signup">{isLoggedIn ? <Redirect to="/home" />: <SignupPage />}</Route>
-      <Route path="/login">{isLoggedIn && <Redirect to="/home" />}</Route>
+      <Route path="/login">{isLoggedIn ? <Redirect to="/home" /> : <LoginPage />}</Route>
       <Route path="*">
         <div>Not found</div>
       </Route>
