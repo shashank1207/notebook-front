@@ -1,17 +1,20 @@
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import Card from "../UI/Card";
-import { TextField } from "@material-ui/core";
+import { TextField, CircularProgress } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Button from "../UI/Button";
 import useInput from "../../hooks/use-input";
 import { postReq } from "../../functions/api-calls/post-requests";
 import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../../store/login-slices";
+import { useHistory } from "react-router";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.login.error_login);
+  const error = useSelector((state) => state.login.error);
   const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  const loading = useSelector((state) => state.login.loading);
+  const history = useHistory();
 
   const {
     valueChangeHandler: emailInputChangeHandler,
@@ -19,6 +22,8 @@ const LoginForm = () => {
     isValid: enteredEmailIsValid,
     value: enteredEmail,
     inputBlurHandler: emailInputBlurHandler,
+    isInputInFocus: isEmailInputInFocus,
+    inputFocusHandler: emailInputFocusHandler,
     reset: resetEmail,
   } = useInput((val) => val.includes("@"));
 
@@ -28,8 +33,16 @@ const LoginForm = () => {
     hasError: passwordInputHasError,
     valueChangeHandler: passwordInputChangeHandler,
     inputBlurHandler: passwordInputBlurHandler,
+    inputFocusHandler: passwordInputFocusHandler,
+    isInputInFocus: isPasswordInputInFocus,
     reset: resetPassword,
   } = useInput((value) => value.trim().length >= 6);
+
+  useEffect(() => {
+    if (isEmailInputInFocus) {
+      dispatch(loginActions.setErrors({ err: null }));
+    }
+  }, [isEmailInputInFocus, isPasswordInputInFocus, dispatch]);
 
   const resetForm = useCallback(() => {
     if (!error) {
@@ -44,9 +57,9 @@ const LoginForm = () => {
     isFormValid = true;
   }
 
-  const formSubmitHandler =async (event) => {
+  const formSubmitHandler = async (event) => {
     event.preventDefault();
-
+    dispatch(loginActions.setloading(true));
     if (!isFormValid) {
       return;
     }
@@ -58,10 +71,16 @@ const LoginForm = () => {
         },
         "/login"
       );
-      console.log(response);
+      dispatch(loginActions.setData(response));
+
+      setTimeout(() => {
+        history.replace("/home");
+        dispatch(loginActions.switchLoginState(true));
+      }, 1000);
     } catch (err) {
       dispatch(loginActions.setErrors({ err: err.message }));
     }
+    dispatch(loginActions.setloading(false));
     resetForm();
   };
 
@@ -82,6 +101,7 @@ const LoginForm = () => {
           value={enteredEmail}
           onBlur={emailInputBlurHandler}
           className={`w-100 my-2`}
+          onFocus={emailInputFocusHandler}
           error={emailInputHasError ? true : false}
           helperText={emailInputHasError ? "Please input valid email" : ""}
         />
@@ -91,6 +111,7 @@ const LoginForm = () => {
           onChange={passwordInputChangeHandler}
           onBlur={passwordInputBlurHandler}
           value={enteredPassword}
+          onFocus={passwordInputFocusHandler}
           type="password"
           className={`w-100 my-2`}
           error={passwordInputHasError ? true : false}
@@ -101,12 +122,13 @@ const LoginForm = () => {
           }
         />
         <Button
-          title="Login"
           color="#fff"
           bg-color="#00a82d"
           type="submit"
           className={`font-weight-bold w-md-75 mt-3 mw-200`}
-        />
+        >
+          {!loading ? "Login" : <CircularProgress />}
+        </Button>
 
         {error && (
           <Alert severity="error" className="my-2">

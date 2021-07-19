@@ -16,7 +16,7 @@ const Button = (props) => {
         border: props.border
       }}
     >
-      {props.title}
+      {props.children ? props.children : props.title}
     </button>
   );
 };

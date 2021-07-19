@@ -4,7 +4,7 @@ const signupSlice = createSlice({
   name: 'signup',
   initialState: {
     error: null,
-    signedup: false,
+    signedup: null,
   },
   reducers: {
     setErrors(state, action){
@@ -12,11 +12,10 @@ const signupSlice = createSlice({
     },
     changeSignedupStatus(state, action){
       state.signedup = action.payload.message;
-      state.token = action.payload.token;
     }
   }
 });
 
 export const signupActions = signupSlice.actions;
 
-export default signupSlice;
+export default signupSlice; 

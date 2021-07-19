@@ -8,7 +8,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 
 function App() {
-  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  const isLoggedIn = useSelector((state) => state.login.isLoggedIn);  
 
   return (
     <Switch>
@@ -16,13 +16,17 @@ function App() {
         {!isLoggedIn ? <Redirect to="/welcome" /> : <Redirect to="/home" />}
       </Route>
       <Route path="/welcome" exact>
-        <WelcomePage />
+        {isLoggedIn ? <Redirect to="/home" /> : <WelcomePage />}
       </Route>
       <Route path="/home">
-        {!isLoggedIn ? <Redirect to="/login" /> : <HomePage />}
+        {!isLoggedIn ? <Redirect to="/welcome" /> : <HomePage />}
       </Route>
-      <Route path="/signup">{isLoggedIn ? <Redirect to="/home" />: <SignupPage />}</Route>
-      <Route path="/login">{isLoggedIn ? <Redirect to="/home" /> : <LoginPage />}</Route>
+      <Route path="/signup">
+        {isLoggedIn ? <Redirect to="/home" /> : <SignupPage />}
+      </Route>
+      <Route path="/login">
+        {isLoggedIn ? <Redirect to="/home" /> : <LoginPage />}
+      </Route>
       <Route path="*">
         <div>Not found</div>
       </Route>

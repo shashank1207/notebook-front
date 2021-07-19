@@ -9,6 +9,7 @@ import { signupActions } from "../../store/signup-slice";
 import { useHistory } from "react-router-dom";
 import useInput from "../../hooks/use-input";
 import { Link } from "react-router-dom";
+import { loginActions } from "../../store/login-slices";
 
 const SignupForm = () => {
   const dispatch = useDispatch();
@@ -107,12 +108,14 @@ const SignupForm = () => {
         },
         "/signup"
       );
+      console.log(response);
+      dispatch(loginActions.setData(response));
       dispatch(signupActions.changeSignedupStatus(response));
       dispatch(signupActions.setErrors({ err: null }));
-
+      dispatch(loginActions.switchLoginState(true));
       setTimeout(() => {
         dispatch(signupActions.changeSignedupStatus({ message: null }));
-        history.replace("/login");
+        history.replace("/home");
       }, 3000);
     } catch (err) {
       dispatch(signupActions.setErrors({ err: err.message }));

@@ -3,6 +3,7 @@ import { useState } from "react";
 const useInput = (validateValue) => {
   const [enteredInputValue, setEnteredInputValue] = useState("");
   const [isInputTouched, setIsInputTouched] = useState(false);
+  const [isInputInFocus, setIsInputInFocus] = useState(false);
 
   let enteredValue = enteredInputValue;
   let isTouched = isInputTouched;
@@ -13,11 +14,17 @@ const useInput = (validateValue) => {
     setEnteredInputValue(event.target.value);
   };
 
+  const inputFocusHandler = (event) => {
+    setIsInputInFocus(true);
+  }
+
   const inputBlurHandler = () => {
     setIsInputTouched(true);
+    setIsInputInFocus(false);
   };
 
   const reset = () => {
+    setEnteredInputValue('');
     setIsInputTouched(false);
   };
 
@@ -27,6 +34,8 @@ const useInput = (validateValue) => {
     hasError,
     valueChangeHandler,
     inputBlurHandler,
+    isInputInFocus,
+    inputFocusHandler,
     reset,
   };
 };
