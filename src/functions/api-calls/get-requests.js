@@ -1,6 +1,6 @@
 const host = "http://localhost:5000";
 
-export const postReq = async (data, path, auth) => {
+const getRequest = async (path, auth) => {
   var myHeaders = new Headers();
   myHeaders.append(
     "Authorization",
@@ -8,8 +8,7 @@ export const postReq = async (data, path, auth) => {
   );
   myHeaders.append("Content-Type", "application/json");
   const response = await fetch(host + path, {
-    method: "POST",
-    body: JSON.stringify(data),
+    method: "GET",
     headers: myHeaders,
   });
 
@@ -19,3 +18,5 @@ export const postReq = async (data, path, auth) => {
   }
   return responseData;
 };
+
+export default getRequest;

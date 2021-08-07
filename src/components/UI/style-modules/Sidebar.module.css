@@ -6,3 +6,24 @@
   left: 0;
   background-color: #000;
 }
+.root{
+  display: "flex";
+}
+.drawer{
+  width: 240px;
+  flex-shrink: 0;
+}
+.drawerPaper{
+  width: 240px;
+  background-color: #000000;
+}
+.text{
+  color: "#fff";
+}
+a{
+  color: '#fff';
+  text-decoration: none;
+}
+.active ListItem{
+  background-color: rgba(0, 0, 0, 0.3);
+}

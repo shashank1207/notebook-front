@@ -9,12 +9,10 @@ const loginSlice = createSlice({
       token: !JSON.parse(localStorage.getItem("userData"))
         ? ""
         : JSON.parse(localStorage.getItem("userData")).token,
-      userId: !JSON.parse(localStorage.getItem("userData"))
-        ? ""
-        : JSON.parse(localStorage.getItem("userData")).userId,
     },
     error: null,
     loading: false,
+    user: {name: '', userId: '', email: ''}
   },
   reducers: {
     switchLoginState(state, action) {
@@ -25,19 +23,21 @@ const loginSlice = createSlice({
     },
     setData(state, action) {
       state.userData.token = action.payload.token;
-      state.userData.userId = action.payload.userId;
       state.data.message = action.payload.message;
       localStorage.setItem(
         "userData",
         JSON.stringify({
-          userId: action.payload.userId,
           token: action.payload.token,
+          time: + new Date()
         })
       );
     },
     setErrors(state, action) {
       state.error = action.payload.err;
     },
+    setUser(state, action){
+      state.user = action.payload.user;
+    }
   },
 });
 

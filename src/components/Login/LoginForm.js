@@ -67,7 +67,7 @@ const LoginForm = () => {
       const response = await postReq(
         {
           email: enteredEmail,
-          password: enteredPassword,
+          password: enteredPassword
         },
         "/login"
       );
@@ -78,6 +78,7 @@ const LoginForm = () => {
         dispatch(loginActions.switchLoginState(true));
       }, 1000);
     } catch (err) {
+      console.log(err);
       dispatch(loginActions.setErrors({ err: err.message }));
     }
     dispatch(loginActions.setloading(false));
