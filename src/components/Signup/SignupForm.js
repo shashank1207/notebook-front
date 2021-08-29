@@ -115,7 +115,7 @@ const SignupForm = () => {
       dispatch(loginActions.switchLoginState(true));
       setTimeout(() => {
         dispatch(signupActions.changeSignedupStatus({ message: null }));
-        history.replace("/home");
+        history.replace("/app/home");
       }, 3000);
     } catch (err) {
       dispatch(signupActions.setErrors({ err: err.message }));
@@ -126,6 +126,7 @@ const SignupForm = () => {
   return (
     <Card
       className={`d-flex align-items-center flex-column w-100 py-2 px-md-5 px-3`}
+      color='#f2f2f2'
     >
       <div className={`d-flex align-items-center flex-column m-2`}>
         <span className={`font-family-roman font-size-lg m-1`}>Sign up</span>

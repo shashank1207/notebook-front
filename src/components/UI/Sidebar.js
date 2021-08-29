@@ -6,15 +6,60 @@ import Divider from "@material-ui/core/Divider";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import { Home, Notes, List as Tasks, Book, AccountBox } from "@material-ui/icons";
+import {
+  Home,
+  Notes,
+  List as Tasks,
+  Book,
+  AccountBox,
+} from "@material-ui/icons";
 import { useSelector } from "react-redux";
-
-
+import { createTheme } from "@material-ui/core";
+import { useCallback, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { NavLink } from "react-router-dom";
+
+import getRequest from "../../functions/api-calls/get-requests";
+import { loginActions } from "../../store/login-slices";
 // import classes from "./style-modules/Sidebar.module.css";
 
 const drawerWidth = 240;
 const Sidebar = () => {
+  const user = useSelector((state) => state.login.user);
+
+  const theme_s = createTheme({
+    typography: {
+      fontFamily: ["Oxygen"].join(","),
+    },
+  });
+
+  const dispatch = useDispatch();
+
+  const getUser = useCallback(async () => {
+    try {
+      const user = await getRequest("/get-user");
+      dispatch(loginActions.setUser({ user: user }));
+    } catch (err) {}
+  }, [dispatch]);
+
+  useEffect(() => {
+    getUser();
+  }, [getUser]);
+
+  useEffect(() => {
+    var timeout;
+    if (!user) {
+      timeout = setTimeout(() => {
+        getUser();
+        console.log(timeout);
+      }, 5000);
+    } else {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+    }
+  }, [getUser, user]);
+
   const useStyles = makeStyles((theme) => ({
     root: {
       display: "flex",
@@ -26,9 +71,13 @@ const Sidebar = () => {
     drawerPaper: {
       width: drawerWidth,
       backgroundColor: "#000000",
+      // borderRight: "0.1px solid #ffffff",
     },
     name: {
-      color: '#fff'
+      color: "#fff",
+      "& > *": {
+        fontFamily: theme_s.typography.fontFamily
+      },
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
@@ -37,38 +86,42 @@ const Sidebar = () => {
       textDecoration: "none",
     },
     icon: {
-      color:'#fff',
-      fontSize: '25px'
+      color: "#cccccc",
+      fontSize: "24px",
     },
     iconItem: {
-      minWidth: '24px',
-      marginRight: '12px'
+      minWidth: "24px",
+      marginRight: "4px",
+      fontSize: "24px",
     },
     item: {
-      paddingTop: '4px',
-      paddingBottom: '4px',
-      width: drawerWidth-8,
+      width: drawerWidth - 8,
+      marginLeft: "4px",
+      marginRight: "4px",
+      color: "#757575",
+      fontWeight: "bolder",
       "&:hover": {
-        backgroundColor: "rgb(120,120,120)",
-        borderRadius: '4px',
-        marginLeft: '4px',
-        marginRight: '4px'
+        backgroundColor: "#262626",
+        borderRadius: "4px",
       },
     },
+    itemText: {
+      fontSize: "14px",
+      marginTop: "0",
+      marginBottom: "0",
+      fontFamily: theme_s.typography.fontFamily,
+    },
     active: {
-      width: drawerWidth-12,
+      width: drawerWidth - 8,
       "& > *": {
-        backgroundColor: "rgb(180,180,180)",
-        borderRadius: '4px',
-        marginLeft: '4px',
-        marginRight: '4px'
+        backgroundColor: "#333333",
+        borderRadius: "4px",
+        color: "#cccccc",
       },
     },
   }));
 
   const classes = useStyles();
-
-  const user = useSelector(state => state.login.user);
 
   return (
     <Drawer
@@ -82,17 +135,39 @@ const Sidebar = () => {
       <Divider />
       <div>
         <ListItem key={`${user.userId}_${Math.random()}`}>
-          <ListItemIcon className={classes.iconItem}><AccountBox className={`${classes.icon} `} /></ListItemIcon>
-          <ListItemText primary={user.name} className={`${classes.name}`} style={{paddingTop: '4px'}}/>
+          <ListItemIcon className={classes.iconItem}>
+            <AccountBox className={`${classes.icon} `} />
+          </ListItemIcon>
+          <ListItemText
+            primary={user.name}
+            className={`${classes.name}`}
+            // style={{ paddingTop: "4px" }}
+          />
         </ListItem>
       </div>
       <Divider />
       <List>
         {[
-          { text: "Home", to: "/home", icon: <Home className={classes.icon} /> },
-          { text: "Notes", to: "/notes", icon: <Notes className={classes.icon} /> },
-          { text: "Notebooks", to: "/notebooks", icon: <Book className={classes.icon} /> },
-          { text: "Tasks", to: "/tasks", icon: <Tasks className={classes.icon} /> },
+          {
+            text: "Home",
+            to: "/app/home",
+            icon: <Home className={classes.icon} />,
+          },
+          {
+            text: "Notes",
+            to: "/app/notes",
+            icon: <Notes className={classes.icon} />,
+          },
+          {
+            text: "Notebooks",
+            to: "/app/notebooks",
+            icon: <Book className={classes.icon} />,
+          },
+          {
+            text: "Tasks",
+            to: "/app/tasks",
+            icon: <Tasks className={classes.icon} />,
+          },
         ].map((item, index) => (
           <NavLink
             to={item.to}
@@ -104,8 +179,14 @@ const Sidebar = () => {
               button
               className={`${classes["active-child"]} ${classes.item} `}
             >
-              <ListItemIcon className={classes.iconItem}>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} style={{paddingTop: '4px'}} />
+              <ListItemIcon className={classes.iconItem}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={item.text}
+                // style={{ paddingTop: "4px" }}
+                classes={{ primary: classes.itemText, root: classes.itemText }}
+              />
             </ListItem>
           </NavLink>
         ))}

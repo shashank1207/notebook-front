@@ -12,7 +12,7 @@ const loginSlice = createSlice({
     },
     error: null,
     loading: false,
-    user: {name: '', userId: '', email: ''}
+    user: { name: "", userId: "", email: "" },
   },
   reducers: {
     switchLoginState(state, action) {
@@ -28,16 +28,19 @@ const loginSlice = createSlice({
         "userData",
         JSON.stringify({
           token: action.payload.token,
-          time: + new Date()
+          time: +new Date(),
         })
       );
     },
     setErrors(state, action) {
       state.error = action.payload.err;
     },
-    setUser(state, action){
+    setUser(state, action) {
       state.user = action.payload.user;
-    }
+    },
+    deleteUserData(state) {
+      state.userData = { token: null };
+    },
   },
 });
 

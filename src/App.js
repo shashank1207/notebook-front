@@ -1,12 +1,13 @@
 import "./App.css";
 import "./Global.css";
 import { Route, Switch, Redirect } from "react-router-dom";
-import HomePage from "./pages/HomePage";
 import { useDispatch, useSelector } from "react-redux";
 import WelcomePage from "./pages/WelcomePage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import { loginActions } from "./store/login-slices";
+import NotesPage from "./pages/NotesPage";
+import EntryPage from "./pages/EntryPage";
 
 function App() {
   const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
@@ -26,19 +27,22 @@ function App() {
     <div className={`app`}>
       <Switch>
         <Route path="/" exact>
-          {!isLoggedIn ? <Redirect to="/welcome" /> : <Redirect to="/home" />}
+          {!isLoggedIn ? <Redirect to="/welcome" /> : <Redirect to="/app/home" />}
         </Route>
         <Route path="/welcome" exact>
-          {isLoggedIn ? <Redirect to="/home" /> : <WelcomePage />}
+          {isLoggedIn ? <Redirect to="/app/home" /> : <WelcomePage />}
         </Route>
-        <Route path="/home">
-          {!isLoggedIn ? <Redirect to="/welcome" /> : <HomePage />}
+        <Route path="/app">
+          {!isLoggedIn ? <Redirect to="/welcome" /> : <EntryPage />}
+        </Route>
+        <Route path="/notes">
+          <NotesPage />
         </Route>
         <Route path="/signup">
-          {isLoggedIn ? <Redirect to="/home" /> : <SignupPage />}
+          {isLoggedIn ? <Redirect to="/app/home" /> : <SignupPage />}
         </Route>
         <Route path="/login">
-          {isLoggedIn ? <Redirect to="/home" /> : <LoginPage />}
+          {isLoggedIn ? <Redirect to="/app/home" /> : <LoginPage />}
         </Route>
         <Route path="*">
           <div>Not found</div>

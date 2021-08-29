@@ -74,7 +74,7 @@ const LoginForm = () => {
       dispatch(loginActions.setData(response));
 
       setTimeout(() => {
-        history.replace("/home");
+        history.replace("/app/home");
         dispatch(loginActions.switchLoginState(true));
       }, 1000);
     } catch (err) {
@@ -86,7 +86,7 @@ const LoginForm = () => {
   };
 
   return (
-    <Card>
+    <Card color='#f2f2f2'>
       <div
         className={`d-flex align-items-center flex-column m-2 py-2 px-md-5 px-3`}
       >
