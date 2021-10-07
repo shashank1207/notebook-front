@@ -29,7 +29,7 @@ const Sidebar = () => {
 
   const theme_s = createTheme({
     typography: {
-      fontFamily: ["Oxygen"].join(","),
+      fontFamily: ["IBM Medium","Oxygen"].join(","),
     },
   });
 

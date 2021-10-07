@@ -108,7 +108,6 @@ const SignupForm = () => {
         },
         "/signup"
       );
-      console.log(response);
       dispatch(loginActions.setData(response));
       dispatch(signupActions.changeSignedupStatus(response));
       dispatch(signupActions.setErrors({ err: null }));

@@ -3,23 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const notesSlice = createSlice({
   name: "notes",
   initialState: {
-    notes: [
-      {
-        _id: "",
-        note: "",
-        title: "",
-        createdOn: "",
-      },
-    ],
+    notes: [],
     allNotes: 
       {
-        notes: [{
-            _id: "",
-            note: "",
-            title: "",
-            createdOn: "",
-        }],
-        totalNotes: 1
+        notes: [],
+        totalNotes: 0
       },
   },
   reducers: {
@@ -35,6 +23,15 @@ const notesSlice = createSlice({
     setAllNotes(state, action) {
       state.allNotes = action.payload;
     },
+    updateNote(state, action){
+      state.allNotes.notes.find((note, index) => {
+        if (note._id === action.payload._id){
+          state.allNotes.notes[index] = {...state.allNotes.notes[index], note: action.payload.note};
+          return true;
+        }
+        return true;
+      })
+    }
   },
 });
 

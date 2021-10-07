@@ -2,6 +2,7 @@ import { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card as CardMui, makeStyles } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
+import { Link } from "react-router-dom";
 
 // import Card from "../UI/Card";
 import getRequest from "functions/api-calls/get-requests";
@@ -129,13 +130,15 @@ const RecentNotes = () => {
     } catch (err) {}
   };
 
-  const notesMap = notes.map((note) => {
+  const notesMap = notes.length && notes.map((note) => {
     return (
-      <CardMui className={`${classes.note}`} key={note._id}>
-        <div className={`${classes.title}`}>{note.title}</div>
-        <div className={`${classes.noteText} line-clamp`}>{note.note}</div>
-        <div className={`${classes.created}`}>{note.created}</div>
-      </CardMui>
+      <Link to={`/app/notes/note/${note._id}`} key={note._id}>
+        <CardMui className={`${classes.note}`} >
+          <div className={`${classes.title}`}>{note.title}</div>
+          <div className={`${classes.noteText} line-clamp`}>{note.note}</div>
+          <div className={`${classes.created}`}>{note.created}</div>
+        </CardMui>
+      </Link>
     );
   });
 
@@ -143,8 +146,11 @@ const RecentNotes = () => {
     <CardMui className={`m-0 ${classes.card} align-content-center mt-5`}>
       <span className={classes.notes_heading}>Recent Notes &#62;</span>
       <div className={classes.notes_row}>
-        {notesMap}
-        <CardMui className={`${classes.note} ${classes.newNote}`} onClick={openNewNote}>
+        {notes.length ? notesMap : null}
+        <CardMui
+          className={`${classes.note} ${classes.newNote}`}
+          onClick={openNewNote}
+        >
           <div className={`align-items-end ${classes.svgCont}`}>
             <AddCircle className={classes.add_icon} />
           </div>

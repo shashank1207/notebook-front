@@ -16,15 +16,20 @@ import {
   faSort,
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
+import { useLocation, useRouteMatch } from "react-router";
+import { convertFromRaw } from "draft-js";
 
 import { notesAction } from "store/notes-slice";
 import getRequest from "functions/api-calls/get-requests";
 import { Fragment } from "react";
+import { NavLink } from "react-router-dom";
 
 const drawerWidth = 280;
 
-const NotesBar = () => {
+const NotesBar = (props) => {
   const dispatch = useDispatch();
+  const { path} = useRouteMatch();
+  const location = useLocation()
   const allNotes = useSelector((state) => state.notes.allNotes);
 
   const useStyles = makeStyles({
@@ -84,60 +89,95 @@ const NotesBar = () => {
     divider: {
       backgroundColor: "#262626",
     },
-    noteListItem:{
-      height: '120px',
-      overflow: 'hidden',
+    noteListItem: {
+      height: "120px",
+      overflow: "hidden",
+      cursor: "pointer",
+      "&:hover": {
+        color: "#fff",
+        backgroundColor: "#262626",
+      },
     },
-    article:{
+    article: {},
+    noteItemDiv: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
     },
-    noteItemDiv:{
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between'
-    },
-    ListItemRootReplace:{
-      display:'block',
+    ListItemRootReplace: {
+      display: "block",
     },
     noteText: {
-      fontWeight: '14px'
+      fontSize: "14px",
     },
-    'MuiList-padding': {
+    lastUpdated: {
+      fontSize: "14px",
+    },
+    "MuiList-padding": {
       paddingTop: 0,
-      paddingBottom: 0
-    }
+      paddingBottom: 0,
+    },
+    navLink: {
+      color: "#fff",
+    },
+    active: {
+      "& > *": {
+        backgroundColor: "#262626",
+
+      },
+      "& li": {
+        boxShadow: '0 0 0 2px #737373 inset'
+      },
+    },
   });
   const classes = useStyles();
 
   const getAllNotes = useCallback(async () => {
+    if(!props.canProceed){
+      return;
+    }
     try {
       const response = await getRequest("/get-all-notes?sort=0");
       console.log(response);
+      // response.forEach(element => {
+      //   if(element.note){
+      //     element.note = convertFromRaw(JSON.parse(element.note));
+      //   }
+      // });
       dispatch(notesAction.setAllNotes(response));
     } catch (err) {}
-  }, [dispatch]);
+  }, [dispatch, props.canProceed]);
 
   useEffect(() => {
     getAllNotes();
-  }, [getAllNotes]);
+    // console.log(url)
+  }, [getAllNotes, location.pathname, props.canProceed]);
 
-  const notesMap = allNotes.notes.map((note) => {
+  const notesMap = allNotes.notes.length && allNotes.notes.map((note) => {
     return (
-      <Fragment>
-        <ListItem className={classes.noteListItem} classes={{root: classes.ListItemRootReplace}}>
-          <article className={`${classes.article} h-100`}>
-            <div className={`${classes.noteItemDiv} h-100`}>
-              <div className={`${classes.noteText}`}>
-              {note.title}
+      <Fragment key={note._id}>
+        <NavLink
+          to={`${path}/note/${note._id}`}
+          className={classes.navLink}
+          activeClassName={classes.active}
+        >
+          <ListItem
+            className={classes.noteListItem}
+            classes={{ root: classes.ListItemRootReplace }}
+          >
+            <article className={`${classes.article} h-100`}>
+              <div className={`${classes.noteItemDiv} h-100`}>
+                <div className={`${classes.noteText}`}>{note.title}</div>
+                <div className={`note-clamp ${classes.noteText}`}>
+                  {note.note}
+                </div>
+                <div className={`${classes.lastUpdated}`}>
+                  {note.lastUpdated}
+                </div>
               </div>
-              <div className={`note-clamp ${classes.noteText}`}>
-              {note.note}
-              </div>
-              <div className={`${classes.noteText}`}>
-                {note.lastUpdated}
-              </div>
-            </div>
-          </article>
-        </ListItem>
+            </article>
+          </ListItem>
+        </NavLink>
         <Divider component="div" classes={{ root: classes.divider }} />
       </Fragment>
     );
@@ -145,7 +185,7 @@ const NotesBar = () => {
 
   return (
     <Drawer
-      className={classes.drawer}
+      className={`${classes.drawer} unselectable`}
       variant="permanent"
       classes={{
         paper: classes.drawerPaper,
@@ -173,7 +213,12 @@ const NotesBar = () => {
         </span>
       </div>
       <Divider component="div" classes={{ root: classes.divider }} />
-      <List style={{height: `${allNotes.length*120}px`, position: 'relative'}} classes={{padding: classes["MuiList-padding"]}} >{notesMap}</List>
+      <List
+        style={{ height: `${allNotes.length * 120}px`, position: "relative" }}
+        classes={{ padding: classes["MuiList-padding"] }}
+      >
+        {allNotes.notes.length ? notesMap : null}
+      </List>
     </Drawer>
   );
 };

@@ -4,7 +4,7 @@ import NotesPage from "./NotesPage";
 import HomePage from "./HomePage";
 
 const EntryPage = () => {
-  const {path} = useRouteMatch();
+  const { path } = useRouteMatch();
 
   return (
     <div className={`d-flex position-absolute min-vw-100`}>
@@ -15,6 +15,9 @@ const EntryPage = () => {
         </Route>
         <Route path={`${path}/notes`}>
           <NotesPage />
+        </Route>
+        <Route path="*">
+          <div>Not found</div>
         </Route>
       </Switch>
     </div>
