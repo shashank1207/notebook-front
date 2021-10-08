@@ -138,12 +138,12 @@ const NotesBar = (props) => {
     }
     try {
       const response = await getRequest("/get-all-notes?sort=0");
-      console.log(response);
-      // response.forEach(element => {
-      //   if(element.note){
-      //     element.note = convertFromRaw(JSON.parse(element.note));
-      //   }
-      // });
+      for (const i in response.notes){
+        if(response.notes[i].note){
+          response.notes[i].note = convertFromRaw(JSON.parse(response.notes[i].note)).getPlainText();
+        }
+      };
+      // console.log(response);
       dispatch(notesAction.setAllNotes(response));
     } catch (err) {}
   }, [dispatch, props.canProceed]);

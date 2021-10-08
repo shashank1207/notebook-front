@@ -185,8 +185,8 @@ const NotePage = (props) => {
     }
   }
 
-  const bold = () => {
-    updateNote(RichUtils.toggleInlineStyle(editorState, 'BOLD'));
+  const inlineStyle = (command) => {
+    updateNote(RichUtils.toggleInlineStyle(editorState, command));
   }
 
 
@@ -222,7 +222,8 @@ const NotePage = (props) => {
         </div>
       </div>
       <div>
-        <button onClick={bold}>Bold</button>
+        <button onClick={() => inlineStyle('BOLD')}>Bold</button>
+        <button onClick={() => inlineStyle('ITALIC')}>Italic</button>
       </div>
       <div className={classes.inputDiv}>
         {/* <textarea

@@ -1,8 +1,9 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Card as CardMui, makeStyles } from "@material-ui/core";
 import { AddCircle } from "@material-ui/icons";
 import { Link } from "react-router-dom";
+import { convertToRaw, EditorState, convertFromRaw } from "draft-js";
 
 // import Card from "../UI/Card";
 import getRequest from "functions/api-calls/get-requests";
@@ -13,6 +14,7 @@ import { postReq } from "functions/api-calls/post-requests";
 const RecentNotes = () => {
   const dispatch = useDispatch();
   const notes = useSelector((state) => state.notes.notes);
+  const [editorState] = useState(EditorState.createEmpty());
 
   const useStyles = makeStyles({
     container: {
@@ -107,6 +109,11 @@ const RecentNotes = () => {
     let notesA = [];
     try {
       notesA = await getRequest("/get-recent-notes");
+      for (const i in notesA.notes){
+        if(notesA.notes[i].note){
+          notesA.notes[i].note = convertFromRaw(JSON.parse(notesA.notes[i].note)).getPlainText();
+        }
+      };
       dispatch(notesAction.setNotes(notesA));
     } catch (err) {
       console.log(err);
@@ -119,11 +126,12 @@ const RecentNotes = () => {
 
   const openNewNote = async () => {
     try {
-      const response = await postReq({}, "/add", dispatch);
+      const n = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
+      const response = await postReq({note: n}, "/add", dispatch);
       dispatch(
         notesAction.addNote({
           _id: response._id,
-          note: response.note,
+          note: convertFromRaw(JSON.parse(n)),
           title: response.title,
         })
       );
