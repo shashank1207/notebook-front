@@ -8,6 +8,8 @@ import LoginPage from "./pages/LoginPage";
 import { loginActions } from "./store/login-slices";
 import NotesPage from "./pages/NotesPage";
 import EntryPage from "./pages/EntryPage";
+import NotFound from "components/NotFound";
+
 
 function App() {
   const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
@@ -27,7 +29,11 @@ function App() {
     <div className={`app`}>
       <Switch>
         <Route path="/" exact>
-          {!isLoggedIn ? <Redirect to="/welcome" /> : <Redirect to="/app/home" />}
+          {!isLoggedIn ? (
+            <Redirect to="/welcome" />
+          ) : (
+            <Redirect to="/app/home" />
+          )}
         </Route>
         <Route path="/welcome" exact>
           {isLoggedIn ? <Redirect to="/app/home" /> : <WelcomePage />}
@@ -35,9 +41,9 @@ function App() {
         <Route path="/app">
           {!isLoggedIn ? <Redirect to="/welcome" /> : <EntryPage />}
         </Route>
-        <Route path="/notes">
+        {/* <Route path="/notes">
           <NotesPage />
-        </Route>
+        </Route> */}
         <Route path="/signup">
           {isLoggedIn ? <Redirect to="/app/home" /> : <SignupPage />}
         </Route>
@@ -45,7 +51,7 @@ function App() {
           {isLoggedIn ? <Redirect to="/app/home" /> : <LoginPage />}
         </Route>
         <Route path="*">
-          <div>Not found</div>
+          <NotFound />
         </Route>
       </Switch>
     </div>

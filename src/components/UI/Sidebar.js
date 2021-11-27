@@ -71,7 +71,7 @@ const Sidebar = () => {
     drawerPaper: {
       width: drawerWidth,
       backgroundColor: "#000000",
-      // borderRight: "0.1px solid #ffffff",
+      borderRight: "0.01ch solid #ffffff",
     },
     name: {
       color: "#fff",

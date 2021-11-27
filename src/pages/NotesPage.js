@@ -29,6 +29,11 @@ const NotesPage = () => {
     <div className={`home-main d-flex ${classes.container}`}>
       <NotesBar canProceed={canProceed} />
       <Switch>
+        <Route exact path={path}>
+          <div>
+            Please select an element.
+          </div>
+        </Route>
         <Route path={`${path}/note/:note_id`}>
           <NotePage setCanProceed={setCanProceed} />
         </Route>

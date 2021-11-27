@@ -5,14 +5,23 @@ import { useRouteMatch } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faExpandAlt, faEllipsisH } from "@fortawesome/free-solid-svg-icons";
 import { Book, MoreHoriz } from "@material-ui/icons";
-import { EditorState, Editor, ContentState, RichUtils, convertToRaw, convertFromRaw } from "draft-js";
+import {
+  EditorState,
+  Editor,
+  ContentState,
+  RichUtils,
+  convertToRaw,
+  convertFromRaw,
+} from "draft-js";
+import createStyles from "draft-js-custom-styles";
+import { useDispatch, useSelector } from "react-redux";
 
 import Button from "components/UI/Button";
 // import Editor from "components/Editor/Editor";
 import { useRef } from "react";
 import { postReq } from "functions/api-calls/post-requests";
-import { useDispatch, useSelector } from "react-redux";
 import { notesAction } from "store/notes-slice";
+import Tags from "components/Tags";
 
 const NotePage = (props) => {
   const { params } = useRouteMatch();
@@ -23,15 +32,24 @@ const NotePage = (props) => {
 
   const noteRef = useRef(note);
   const classes = makeStyles({
-    body: {
+    noteContainer:{
       display: "flex",
       width: "calc(100% - 280px)",
       backgroundColor: "#262626",
+      flexDirection: "column",
+      minWidth: "calc(100%-280px)",
+      // overflowY: "scroll",
+      minHeight: "100%",
+    },
+    body: {
+      display: "flex",
+      // width: "calc(100% - 280px)",
+      backgroundColor: "#262626",
       padding: "12px",
       flexDirection: "column",
-      minWidth: 'calc(100%-280px)',
-      overflowY:'scroll',
-      minHeight:'100%'
+      minWidth: "calc(100%-280px)",
+      // overflowY: "scroll",
+      minHeight: "100%",
     },
     upperPart: {
       display: "flex",
@@ -96,19 +114,51 @@ const NotePage = (props) => {
       // textAlign: 'start'
     },
     inputDiv: {
-      minHeight:'100%',
+      minHeight: "calc(100% - 102px)",
       height: "auto",
-      padding: '12px'
+      padding: "12px",
     },
-    title:{
-      fontSize: '32px',
-      fontWeight: 'bolder',
-      minWidth: '32px',
-      width:'100%',
-      padding: '8px 8px 8px 0px',
-      outline: 'none'
-    }
+    title: {
+      fontSize: "32px",
+      fontWeight: "bolder",
+      minWidth: "32px",
+      width: "100%",
+      padding: "8px 8px 8px 0px",
+      outline: "none",
+    },
+    select: {
+      outline: "none",
+      height: "calc(100% - 20px)",
+      margin: "10px",
+      padding: "4px",
+    },
+    editor: {
+      fontSize: "19px",
+    },
+    tags: {
+      width: "100%",
+      height: "auto",
+      borderTop: "0.1px solid #000",
+      padding: '4px',
+      position:'absolute',
+      bottom: '0px',
+      backgroundColor:'#000',
+      display:'flex',
+      flexDirection:'row',
+      alignItems:'center'
+    },
   })();
+
+  const customStyle = {
+    fontSizeMid: {
+      fontSize: "12px",
+    },
+  };
+
+  const { styles, customStyleFn, exporter } = createStyles(
+    ["font-size", "color", "text-transform"],
+    "CUSTOM_"
+  );
 
   const getNote = useCallback(async () => {
     props.setCanProceed(false);
@@ -171,73 +221,130 @@ const NotePage = (props) => {
   };
 
   const editTitle = (event) => {
-    const n = {...note, title: event.target.value}
+    const n = { ...note, title: event.target.value };
     setNote(n);
-    const updatedTitle = {noteId: params.note_id, title: event.target.value}
+    const updatedTitle = { noteId: params.note_id, title: event.target.value };
     postReq(updatedTitle, "/update-title");
+    dispatch(
+      notesAction.updateTitle({
+        _id: params.note_id,
+        title: event.target.value,
+      })
+    );
   };
 
   const handleKeyCommand = (command, editorState) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
 
-    if(newState){
+    if (newState) {
       updateNote(editorState);
     }
-  }
+  };
 
   const inlineStyle = (command) => {
     updateNote(RichUtils.toggleInlineStyle(editorState, command));
-  }
+    // updateNote(EditorState.setInlineStyleOverride(editorState))
+  };
 
+  const change = (e) => {
+    const newState = styles.fontSize.toggle(editorState, e);
+
+    updateNote(newState);
+
+    // updateNote(RichUtils.toggleInlineStyle(editorState, 'fontSizeMid'));
+  };
 
   useEffect(() => {
     getNote();
   }, [getNote]);
 
   return (
-    <div className={`${classes.body} unselectable`}>
-      <div className={classes.upperPart}>
-        <div className={classes.leftUpper}>
-          <FontAwesomeIcon
-            icon={faExpandAlt}
-            className={classes.expandArrow}
-            color="#cccccc"
-          />
-          <Divider
-            orientation="vertical"
-            style={{ height: "22px", width: "1px" }}
-            className={classes.verDivider}
-          />
-          <div className={classes.notebook}>
-            <Book className={classes.bookIcon} />
-            <span className={classes.text}>First Notebook</span>
+    <div className={`${classes.noteContainer}`}>
+      <div className={`${classes.body} unselectable`}>
+        <div className={classes.upperPart}>
+          <div className={classes.leftUpper}>
+            <FontAwesomeIcon
+              icon={faExpandAlt}
+              className={classes.expandArrow}
+              color="#cccccc"
+            />
+            <Divider
+              orientation="vertical"
+              style={{ height: "22px", width: "1px" }}
+              className={classes.verDivider}
+            />
+            <div className={classes.notebook}>
+              <Book className={classes.bookIcon} />
+              <span className={classes.text}>First Notebook</span>
+            </div>
+          </div>
+          <div className={classes.rightUpper}>
+            <span className={classes.text}>Only you</span>
+            <Button type="button" className={classes.button}>
+              Share
+            </Button>
+            <MoreHoriz className={classes.ellipsis} />
           </div>
         </div>
-        <div className={classes.rightUpper}>
-          <span className={classes.text}>Only you</span>
-          <Button type="button" className={classes.button}>
-            Share
+        <div>
+          <Button
+            bg-color={true && "#4AA92F"}
+            height={"auto"}
+            style={{ fontWeight: "bold", padding: "4px" }}
+            width={"32px"}
+            onClick={() => inlineStyle("BOLD")}
+          >
+            B
           </Button>
-          <MoreHoriz className={classes.ellipsis} />
+          <Button
+            onClick={() => inlineStyle("ITALIC")}
+            bg-color={true && "#4AA92F"}
+            height={"auto"}
+            width={"32px"}
+            style={{ fontStyle: "italic", padding: "4px" }}
+          >
+            I
+          </Button>
+          <select
+            onChange={(e) => change(e.target.value)}
+            className={classes.select}
+          >
+            <option>8px</option>
+            <option>12px</option>
+            <option>16px</option>
+            <option>20px</option>
+          </select>
         </div>
-      </div>
-      <div>
-        <button onClick={() => inlineStyle('BOLD')}>Bold</button>
-        <button onClick={() => inlineStyle('ITALIC')}>Italic</button>
-      </div>
-      <div className={classes.inputDiv}>
-        {/* <textarea
+        <div className={classes.inputDiv}>
+          {/* <textarea
           value={note.note}
           ref={noteRef}
           onChange={updateNote}
           className={classes.inputEditor}
         /> */}
-        {note.note && <input className={`${classes.title} ${classes.inputEditor}`} value={note.title} onChange={editTitle} />}
-        <Editor editorState={editorState} onChange={updateNote}  handleKeyCommand={handleKeyCommand} />
+          {note.note && (
+            <input
+              className={`${classes.title} ${classes.inputEditor}`}
+              value={note.title}
+              onChange={editTitle}
+            />
+          )}
+          <div>
+            <Editor
+              editorState={editorState}
+              onChange={updateNote}
+              handleKeyCommand={handleKeyCommand}
+              customStyleFn={customStyleFn}
+              // customStyleMap={customStyle}
+            />
+          </div>
+        </div>
+        {/* {note.note && <Editor note={note.note} params= {params} dispatch={dispatchNote}/>} */}
       </div>
-      {/* {note.note && <Editor note={note.note} params= {params} dispatch={dispatchNote}/>} */}
-
-      
+      <div className={classes.tags}>
+        Tags:
+        <Tags />
+      </div>
     </div>
   );
 };

@@ -3,8 +3,10 @@ import PropsTypes from "prop-types";
 
 const Button = (props) => {
   const classes = props.className;
+  const height = props.height ? 'auto' : 'initial';
+  const fontSize = props.fontSize ? props.fontSize : 'initial'
   return (
-    <button
+      <button
       onClick={props.onClick}
       type={props.type ? props.type : "button"}
       className={`${classes} ${styles.button} font-family-roman font-size-md `}
@@ -14,9 +16,11 @@ const Button = (props) => {
         width: props.width,
         borderRadius: props.borderRadius,
         border: props.border,
+        height: height,
+        fontSize: fontSize,
+        ...props.style
       }}
-    >
-      {props.children ? props.children : props.title}
+    >{props.children ? props.children : props.title}
     </button>
   );
 };
@@ -24,6 +28,7 @@ const Button = (props) => {
 Button.propTypes = {
   onClick: PropsTypes.func,
   type: PropsTypes.string,
+  height: PropsTypes.string
 };
 
 export default Button;

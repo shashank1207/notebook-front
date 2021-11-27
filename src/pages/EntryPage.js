@@ -1,7 +1,8 @@
 import Sidebar from "../components/UI/Sidebar";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
 import NotesPage from "./NotesPage";
 import HomePage from "./HomePage";
+import NotFound from "components/NotFound";
 
 const EntryPage = () => {
   const { path } = useRouteMatch();
@@ -10,6 +11,9 @@ const EntryPage = () => {
     <div className={`d-flex position-absolute min-vw-100`}>
       <Sidebar />
       <Switch>
+        <Route exact path={`${path}`}>
+          <Redirect to={`${path}/home`}></Redirect>
+        </Route>
         <Route path={`${path}/home`}>
           <HomePage />
         </Route>
@@ -17,7 +21,7 @@ const EntryPage = () => {
           <NotesPage />
         </Route>
         <Route path="*">
-          <div>Not found</div>
+          <NotFound />
         </Route>
       </Switch>
     </div>

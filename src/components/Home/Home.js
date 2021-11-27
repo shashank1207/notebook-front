@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/core";
+import ScratchPad from "./ScratchPad";
 
 import RecentNotes from "./RecentNotes";
 // import useNotes from "../../functions/notes/NotesFunctions";
@@ -21,6 +22,7 @@ const Home = () => {
   return (
     <div className={`home-main d-flex ${classes.container}`}>
       <RecentNotes />
+      <ScratchPad />
     </div>
   );
 };

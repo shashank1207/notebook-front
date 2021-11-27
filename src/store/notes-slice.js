@@ -31,6 +31,15 @@ const notesSlice = createSlice({
         }
         return true;
       })
+    },
+    updateTitle(state, action){
+      state.allNotes.notes.find((note, index) => {
+        if (note._id === action.payload._id){
+          state.allNotes.notes[index] = {...state.allNotes.notes[index], title: action.payload.title};
+          return true;
+        }
+        return true;
+      })
     }
   },
 });
