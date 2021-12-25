@@ -3,19 +3,21 @@ import { TextField, Divider } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Button from "../UI/Button";
 import { useCallback} from "react";
-import { postReq } from "../../functions/api-calls/post-requests";
+// import { postReq } from "../../functions/api-calls/post-requests";
 import { useDispatch, useSelector } from "react-redux";
 import { signupActions } from "../../store/signup-slice";
 import { useHistory } from "react-router-dom";
 import useInput from "../../hooks/use-input";
 import { Link } from "react-router-dom";
 import { loginActions } from "../../store/login-slices";
+import usePost from "functions/api-calls/usePost";
 
 const SignupForm = () => {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.signup.error);
   const isSignedup = useSelector((state) => state.signup.signedup);
   const history = useHistory();
+  const postReq = usePost();
 
   const {
     value: enteredName,

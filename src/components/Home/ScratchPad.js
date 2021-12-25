@@ -1,11 +1,15 @@
 import { makeStyles } from "@material-ui/core";
-import getRequest from "functions/api-calls/get-requests";
-import { postReq } from "functions/api-calls/post-requests";
+// import getRequest from "functions/api-calls/get-requests";
+// import { postReq } from "functions/api-calls/post-requests";
+import useGet from "functions/api-calls/useGet";
 import { useEffect } from "react";
 import { useState } from "react";
+import usePost from "functions/api-calls/usePost";
 
 const ScratchPad = () => {
   const [scratch, setScratch] = useState(null);
+  const getRequest  = useGet();
+  const postReq = usePost();
 
   const classes = makeStyles({
     container: {

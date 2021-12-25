@@ -17,15 +17,20 @@ import { useSelector } from "react-redux";
 import { createTheme } from "@material-ui/core";
 import { useCallback, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useRouteMatch } from "react-router-dom";
+import { ExitToApp as Logout } from "@material-ui/icons";
 
-import getRequest from "../../functions/api-calls/get-requests";
+// import getRequest from "../../functions/api-calls/get-requests";
 import { loginActions } from "../../store/login-slices";
+import useGet from "functions/api-calls/useGet";
 // import classes from "./style-modules/Sidebar.module.css";
 
 const drawerWidth = 240;
 const Sidebar = () => {
   const user = useSelector((state) => state.login.user);
+  const getRequest = useGet();
+
+  const { path } = useRouteMatch();
 
   const theme_s = createTheme({
     typography: {
@@ -123,6 +128,10 @@ const Sidebar = () => {
 
   const classes = useStyles();
 
+  const logoutUser = () => {
+    dispatch(loginActions.logoutUser());
+  }
+
   return (
     <Drawer
       className={classes.drawer}
@@ -152,28 +161,39 @@ const Sidebar = () => {
             text: "Home",
             to: "/app/home",
             icon: <Home className={classes.icon} />,
+            function: () => {}
           },
           {
             text: "Notes",
             to: "/app/notes",
             icon: <Notes className={classes.icon} />,
+            function: () => {}
           },
           {
             text: "Notebooks",
             to: "/app/notebooks",
             icon: <Book className={classes.icon} />,
+            function: () => {}
           },
           {
             text: "Tasks",
             to: "/app/tasks",
             icon: <Tasks className={classes.icon} />,
+            function: () => {}
           },
+          {
+            text: "Logout",
+            to: '/welcome',
+            icon: <Logout className={classes.icon} />,
+            function: logoutUser
+          }
         ].map((item, index) => (
           <NavLink
             to={item.to}
             className={classes.link}
             activeClassName={classes.active}
             key={index}
+            onClick={item.function}
           >
             <ListItem
               button

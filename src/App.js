@@ -9,11 +9,26 @@ import { loginActions } from "./store/login-slices";
 import NotesPage from "./pages/NotesPage";
 import EntryPage from "./pages/EntryPage";
 import NotFound from "components/NotFound";
+import ErrorPopup from "components/Pop-up";
+// import useGet from "functions/api-calls/useGet";
+import { useEffect } from "react";
+import usePost from "functions/api-calls/usePost";
 
 
 function App() {
   const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
+  const hasError = useSelector((state) => state.error.hasError)
   const dispatch = useDispatch();
+
+  const postReq = usePost();
+
+  const getError = async() => {
+    const res  = await postReq({},'/error');
+  };
+
+  useEffect(()=> {
+    getError();
+  }, []);
 
   if (isLoggedIn) {
     const time = +new Date();
@@ -27,6 +42,7 @@ function App() {
 
   return (
     <div className={`app`}>
+      {hasError && <ErrorPopup />}
       <Switch>
         <Route path="/" exact>
           {!isLoggedIn ? (

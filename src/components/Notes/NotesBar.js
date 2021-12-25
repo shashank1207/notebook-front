@@ -16,13 +16,15 @@ import {
   faSort,
   faFilter,
 } from "@fortawesome/free-solid-svg-icons";
-import { useLocation, useRouteMatch } from "react-router";
+import { useHistory, useLocation, useRouteMatch } from "react-router";
 import { convertFromRaw } from "draft-js";
+import { useState } from "react";
 
 import { notesAction } from "store/notes-slice";
-import getRequest from "functions/api-calls/get-requests";
+// import getRequest from "functions/api-calls/get-requests";
 import { Fragment } from "react";
 import { NavLink } from "react-router-dom";
+import useGet from "functions/api-calls/useGet";
 
 const drawerWidth = 280;
 
@@ -31,6 +33,9 @@ const NotesBar = (props) => {
   const { path} = useRouteMatch();
   const location = useLocation()
   const allNotes = useSelector((state) => state.notes.allNotes);
+  const [defaultNote, setDefaultNote] = useState('');
+  let history = useHistory();
+  const getRequest = useGet();
 
   const useStyles = makeStyles({
     drawer: {
@@ -46,6 +51,7 @@ const NotesBar = (props) => {
       position: "absolute",
       left: 240,
       backgroundColor: "#1a1a1a",
+      zIndex: 5
       // borderRight: "0.1px solid #ffffff",
     },
     list: {
@@ -143,10 +149,14 @@ const NotesBar = (props) => {
           response.notes[i].note = convertFromRaw(JSON.parse(response.notes[i].note)).getPlainText();
         }
       };
-      // console.log(response);
+      setDefaultNote(response.notes[0]._id);
       dispatch(notesAction.setAllNotes(response));
     } catch (err) {}
   }, [dispatch, props.canProceed]);
+
+  // useEffect(() => {
+  //   history.replace(`${path}/note/${defaultNote}`);
+  // }, []);
 
   useEffect(() => {
     getAllNotes();

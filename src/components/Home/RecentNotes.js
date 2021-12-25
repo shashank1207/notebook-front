@@ -6,15 +6,19 @@ import { Link } from "react-router-dom";
 import { convertToRaw, EditorState, convertFromRaw } from "draft-js";
 
 // import Card from "../UI/Card";
-import getRequest from "functions/api-calls/get-requests";
+// import getRequest from "functions/api-calls/get-requests";
 import { notesAction } from "store/notes-slice";
-import { postReq } from "functions/api-calls/post-requests";
+// import { postReq } from "functions/api-calls/post-requests";
+import useGet from "functions/api-calls/useGet";
 // import useNotes from "functions/notes/NotesFunctions";
+import usePost from "functions/api-calls/usePost";
 
 const RecentNotes = () => {
   const dispatch = useDispatch();
   const notes = useSelector((state) => state.notes.notes);
   const [editorState] = useState(EditorState.createEmpty());
+  const getRequest = useGet();
+  const postReq = usePost();
 
   const useStyles = makeStyles({
     container: {
@@ -128,14 +132,20 @@ const RecentNotes = () => {
     try {
       const n = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
       const response = await postReq({note: n}, "/add", dispatch);
+      const note = convertFromRaw(await JSON.parse(n)).getPlainText();
       dispatch(
         notesAction.addNote({
           _id: response._id,
-          note: convertFromRaw(JSON.parse(n)),
+          note: note,
           title: response.title,
         })
       );
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+      <div>
+        {err}
+      </div>
+    }
   };
 
   const notesMap = notes.length && notes.map((note) => {

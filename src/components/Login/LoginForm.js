@@ -4,10 +4,11 @@ import { TextField, CircularProgress } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import Button from "../UI/Button";
 import useInput from "../../hooks/use-input";
-import { postReq } from "../../functions/api-calls/post-requests";
+// import { postReq } from "../../functions/api-calls/post-requests";
 import { useDispatch, useSelector } from "react-redux";
 import { loginActions } from "../../store/login-slices";
 import { useHistory } from "react-router";
+import usePost from "functions/api-calls/usePost";
 
 const LoginForm = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const LoginForm = () => {
   const isLoggedIn = useSelector((state) => state.login.isLoggedIn);
   const loading = useSelector((state) => state.login.loading);
   const history = useHistory();
+  const postReq = usePost();
 
   const {
     valueChangeHandler: emailInputChangeHandler,

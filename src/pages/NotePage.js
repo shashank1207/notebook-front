@@ -1,5 +1,5 @@
 import { Divider, makeStyles } from "@material-ui/core";
-import getRequest from "functions/api-calls/get-requests";
+// import getRequest from "functions/api-calls/get-requests";
 import { useCallback, useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -19,9 +19,11 @@ import { useDispatch, useSelector } from "react-redux";
 import Button from "components/UI/Button";
 // import Editor from "components/Editor/Editor";
 import { useRef } from "react";
-import { postReq } from "functions/api-calls/post-requests";
+// import { postReq } from "functions/api-calls/post-requests";
 import { notesAction } from "store/notes-slice";
 import Tags from "components/Tags";
+import useGet from "functions/api-calls/useGet";
+import usePost from "functions/api-calls/usePost";
 
 const NotePage = (props) => {
   const { params } = useRouteMatch();
@@ -29,6 +31,9 @@ const NotePage = (props) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   // const allNotes = useSelector((state) => state.notes.allNotes);
   const dispatch = useDispatch();
+
+  const getRequest = useGet();
+  const postReq = usePost();
 
   const noteRef = useRef(note);
   const classes = makeStyles({
@@ -145,7 +150,7 @@ const NotePage = (props) => {
       backgroundColor:'#000',
       display:'flex',
       flexDirection:'row',
-      alignItems:'center'
+      alignItems:'center',
     },
   })();
 

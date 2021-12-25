@@ -1,0 +1,57 @@
+.main{
+  position: absolute;
+  width: 100%;
+  height: auto;
+  color: #fff;
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  top: 90%;
+}
+
+.container{
+  position: relative;
+  justify-content: space-between;
+  min-width: 30%;
+  padding: 12px;
+  width: auto;
+  height: 48px;
+  background-color: #9c2b2e;
+  display: flex;
+  align-items: center;
+  z-index: inherit;
+  border-radius: 12px;
+  /* top: 90%; */
+}
+
+.inserting{
+  animation: popup 3s;
+}
+
+.removing{
+  animation: popup-remove 3s;
+}
+
+.close{
+  cursor: pointer;
+  margin-left: 12px
+}
+
+@keyframes popup{
+  0%{
+    top: 95%;
+  }
+  100%{
+    top: 90%;
+  }
+}
+
+@keyframes popup-remove{
+  0%{
+    top: 90%
+  }
+  100%{
+    top: 101%;
+  }
+}

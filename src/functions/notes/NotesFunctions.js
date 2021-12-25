@@ -3,10 +3,15 @@ import { useDispatch} from "react-redux";
 
 import getRequest from "../../functions/api-calls/get-requests";
 import { notesAction } from "../../store/notes-slice";
-import { postReq } from "../../functions/api-calls/post-requests";
+// import { postReq } from "../../functions/api-calls/post-requests";
+import useGet from "functions/api-calls/useGet";
+import usePost from "functions/api-calls/usePost";
 
 const useNotes = () => {
   const dispatch = useDispatch();
+  const getRequest = useGet();
+  const postReq = usePost();
+
   const openNewNote = async (setOpenEditor) => {
     const response = await postReq({}, "/add");
     dispatch(

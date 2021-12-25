@@ -41,6 +41,11 @@ const loginSlice = createSlice({
     deleteUserData(state) {
       state.userData = { token: null };
     },
+    logoutUser(state){
+      state.isLoggedIn = false;
+      state.userData = {};
+      localStorage.removeItem('userData');
+    }
   },
 });
 

@@ -5,10 +5,16 @@ const getRequest = async (path) => {
   const token = JSON.parse(localStorage.getItem("userData")).token;
   myHeaders.append("Authorization", "Bearer " + token);
   myHeaders.append("Content-Type", "application/json");
-  const response = await fetch(host + path, {
-    method: "GET",
-    headers: myHeaders,
-  });
+  let response;
+
+  try{
+    response = await fetch(host + path, {
+      method: "GET",
+      headers: myHeaders,
+    });  
+  } catch (err){
+    
+  }
 
   const responseData = await response.json();
   if (!(await response.ok)) {
