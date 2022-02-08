@@ -3,6 +3,7 @@ import { Route, Switch, useRouteMatch, Redirect } from "react-router-dom";
 import NotesPage from "./NotesPage";
 import HomePage from "./HomePage";
 import NotFound from "components/NotFound";
+import NotebookPage from "./NotebookPage";
 
 const EntryPage = () => {
   const { path } = useRouteMatch();
@@ -19,6 +20,9 @@ const EntryPage = () => {
         </Route>
         <Route path={`${path}/notes`}>
           <NotesPage />
+        </Route>
+        <Route path={`${path}/notebooks`}>
+          <NotebookPage />
         </Route>
         <Route path="*">
           <NotFound />

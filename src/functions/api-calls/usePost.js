@@ -7,18 +7,23 @@ const host = "http://localhost:5000";
 const usePost = () => {
   const dispatch = useDispatch();
 
-  const postReq = async (data, path) => {
+  const postReq = async (data, path, type) => {
     var myHeaders = new Headers();
     let userData = JSON.parse(localStorage.getItem("userData"));
     const token = userData ? userData.token : null;
     myHeaders.append("Authorization", "Bearer " + token);
     const raw = JSON.stringify(data);
-    myHeaders.append("Content-Type", "application/json");
-    const response = await fetch(host + path, {
-      method: "POST",
-      body: raw,
-      headers: myHeaders,
-    });
+    myHeaders.append("Content-Type", type ? type : "application/json");
+    let response;
+    try{
+      response = await fetch(host + path, {
+        method: "POST",
+        body: raw,
+        headers: myHeaders,
+      });
+    } catch(err){
+      dispatch(errorAction.setError({message: err.message}));
+    }
   
     const responseData = await response.json();
     if (

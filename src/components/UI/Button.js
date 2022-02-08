@@ -28,7 +28,8 @@ const Button = (props) => {
 Button.propTypes = {
   onClick: PropsTypes.func,
   type: PropsTypes.string,
-  height: PropsTypes.string
+  height: PropsTypes.string,
+  className: PropsTypes.object
 };
 
 export default Button;

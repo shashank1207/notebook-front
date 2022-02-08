@@ -14,9 +14,14 @@
   font-family: "IBM Regular";
   src: url("./fonts/IBMPlexSans-Regular.ttf");
 }
+
+html{
+  height: 100%;
+}
 body {
   font-family: "IBM Regular";
   overflow: hidden;
+  /* height: 100%; */
 }
 .font-family-roman {
   font-family: "Times-new-roman" !important;
@@ -149,6 +154,10 @@ input {
 .input-tag:focus {
   outline: none;
   background-color: #1a1a1a;
+}
+
+.attachment-btn:hover{
+  background-color: #4d4c4c; 
 }
 
 

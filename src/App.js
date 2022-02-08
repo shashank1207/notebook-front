@@ -20,15 +20,15 @@ function App() {
   const hasError = useSelector((state) => state.error.hasError)
   const dispatch = useDispatch();
 
-  const postReq = usePost();
+  // const postReq = usePost();
 
-  const getError = async() => {
-    const res  = await postReq({},'/error');
-  };
+  // const getError = async() => {
+  //   const res  = await postReq({},'/error');
+  // };
 
-  useEffect(()=> {
-    getError();
-  }, []);
+  // useEffect(()=> {
+  //   getError();
+  // }, []);
 
   if (isLoggedIn) {
     const time = +new Date();

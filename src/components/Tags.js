@@ -62,7 +62,8 @@ const Tags = () => {
       minWidth: "120px",
     },
     addTag: {
-      flexGrow:100
+      flexGrow:100,
+      display: 'flex',
     },
   })();
 
@@ -85,7 +86,7 @@ const Tags = () => {
       setAdding(false);
       const newArray = tagsArray;
       const data = { tagName: e.target.value, noteId: params.note_id };
-      const response = await postReq(data, "/add-tag", () => {});
+      const response = await postReq(data, "/add-tag");
       newArray.push(response);
       setTagsArray(newArray);
       setTag("#");

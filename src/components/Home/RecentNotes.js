@@ -131,7 +131,7 @@ const RecentNotes = () => {
   const openNewNote = async () => {
     try {
       const n = JSON.stringify(convertToRaw(editorState.getCurrentContent()));
-      const response = await postReq({note: n}, "/add", dispatch);
+      const response = await postReq({note: n}, "/add");
       const note = convertFromRaw(await JSON.parse(n)).getPlainText();
       dispatch(
         notesAction.addNote({

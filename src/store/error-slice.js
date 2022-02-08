@@ -9,7 +9,11 @@ const errorSlice = createSlice({
   reducers:{
     setError(state, action) {
       state.hasError = true;
-      state.message = action.payload.message
+      state.message = action.payload.message;
+      // setTimeout(() => {
+      //   state.hasError = false;
+      //   // state.message = "";
+      // }, 60000)
     },
     revokeError(state){
       state.hasError = false

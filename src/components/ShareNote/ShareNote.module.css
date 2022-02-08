@@ -1,0 +1,127 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1201;
+}
+
+.modal {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  height: 360px;
+  width: 600px;
+  background-color: #262626;
+  border-radius: 12px;
+  z-index: 1202;
+  color: #fff;
+}
+.search{
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px;
+}
+.share-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100%;
+  align-items: flex-end;
+  padding-top: 12px;
+}
+input[type=email]{
+  display: flex;
+  flex-direction: column;
+  flex: 4;
+  border: none;
+  border-radius: 12px;
+  border: 2px solid #4aa92f;
+  box-shadow: none;
+  height: 36px;
+  background-color: rgba(182, 181, 181, 0.9);
+}
+input[type="file"]::-webkit-file-upload-button:hover {
+  box-shadow: none;
+}
+.submit-btn{
+  background-color: #4aa92f;
+  outline: none;
+  flex: 1;
+  cursor: pointer;
+  box-shadow: 1.5px 1.5px 0.5px 1.5px #2a611b; /* offset-x | offset-y | blur-radius | spread-radius | color */
+  border: none;
+  color: #fff;
+  border-radius: 4px;
+  height: 28px;
+  margin: 12px;
+}
+.share-note{
+  color: #fff;
+  padding-left: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  width: 100%;
+  text-align: start;
+}
+.users{
+  display: flex;
+  flex-direction: column;
+  padding: 12px 24px;
+  background-color: #424242;
+  user-select: none;
+}
+.message{
+  display: flex;
+  flex-direction: column;
+  padding: 12px 24px;
+  background-color: #4aa92f;
+  user-select: none;
+  width: 100%;
+}
+.btn-div {
+  padding: 20px;
+}
+.submit-btn:disabled{
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.cancel-btn {
+  position: relative;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  box-shadow: none;
+  border: 1px solid #fff;
+  color: #fff;
+  border-radius: 12px;
+  padding: 8px 16px;
+  /* width: 60px; */
+}
+
+.cancel-btn:hover {
+  background-color: gray;
+}
+.submit-btn-share {
+  position: relative;
+  background-color: #4aa92f;
+  outline: none;
+  cursor: pointer;
+
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  box-shadow: none;
+  border: none;
+  color: #fff;
+  border-radius: 12px;
+  padding: 8px 16px;
+  /* width: 60px; */
+  margin-right: 20px;
+}

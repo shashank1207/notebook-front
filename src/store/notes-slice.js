@@ -39,7 +39,14 @@ const notesSlice = createSlice({
           return true;
         }
         return true;
-      })
+      });
+    },
+    deleteNote(state, action){
+      const newObj = state.allNotes.notes.filter(note => {
+        return note._id !== action.payload.noteId;
+      });
+      console.log(newObj);
+      state.allNotes.notes = newObj;
     }
   },
 });
