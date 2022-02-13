@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { errorAction } from "store/error-slice";
-const host = "http://localhost:5000";
+const host = "https://notebook-backend-shashank.herokuapp.com/";
 
 const useGet = () => {
   const dispatch = useDispatch();

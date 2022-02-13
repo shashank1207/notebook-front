@@ -216,11 +216,11 @@ const NotesBar = (props) => {
       </div>
       <div className={classes.optionsCont}>
         <span className={classes.notesLength}>{allNotes.totalNotes}</span>
-        <span className={classes.sfCont}>
+        {/* <span className={classes.sfCont}>
           <FontAwesomeIcon icon={faSort} className={classes.sfIcon} />
           <FontAwesomeIcon icon={faFilter} className={classes.sfIcon} />
           <FontAwesomeIcon icon={faBorderAll} className={classes.sfIcon} />
-        </span>
+        </span> */}
       </div>
       <Divider component="div" classes={{ root: classes.divider }} />
       <List

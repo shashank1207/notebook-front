@@ -92,7 +92,7 @@ const ScratchPad = () => {
           </div>
         </section>
       </div>
-      <div className={classes.recentlyCaptured}></div>
+      {/* <div className={classes.recentlyCaptured}></div> */}
     </div>
   );
 };

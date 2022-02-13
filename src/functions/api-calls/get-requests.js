@@ -1,4 +1,4 @@
-const host = "http://localhost:5000";
+const host = "https://notebook-backend-shashank.herokuapp.com/";
 
 const getRequest = async (path) => {
   var myHeaders = new Headers();

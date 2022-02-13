@@ -156,6 +156,7 @@ const NotePage = (props) => {
       height: "calc(100% - 20px)",
       margin: "10px",
       padding: "4px",
+      borderRadius:'8px'
     },
     editor: {
       fontSize: "19px",

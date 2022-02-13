@@ -1,6 +1,6 @@
 import { loginActions } from "store/login-slices";
 
-const host = "http://localhost:5000";
+const host = "https://notebook-backend-shashank.herokuapp.com/";
 
 export const postReq = async (data, path, dispatch) => {
   var myHeaders = new Headers();
