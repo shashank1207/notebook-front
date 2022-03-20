@@ -6,6 +6,7 @@ import {
 } from "@material-ui/core";
 import classes from "./Notebook.module.css";
 import { Book, Add } from "@material-ui/icons";
+import underConstruct from "../../under_construction.svg";
 
 const Notebook = () => {
   const muiClasses = makeStyles({
@@ -18,6 +19,12 @@ const Notebook = () => {
       color: "#fff",
       fontWeight: "bold",
     },
+    underConstruct:{
+      display: 'flex',
+      justifyContent:'center',
+      alignItems:'center',
+      height:'100vh'
+    }
   })();
   return (
     <div className={classes.container}>
@@ -34,8 +41,14 @@ const Notebook = () => {
           </ListItem>
         </div>
         <div className={classes["create-new-div"]}>
-          <div className={classes["create-new"]}><Add />Create New Notebook</div>
+          <div className={classes["create-new"]}>
+            <Add />
+            Create New Notebook
+          </div>
         </div>
+      </div>
+      <div className={muiClasses.underConstruct}>
+        <img src={underConstruct} />
       </div>
     </div>
   );
